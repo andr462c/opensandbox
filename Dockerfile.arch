@@ -1,0 +1,18 @@
+# Lightweight Arch Linux base
+FROM archlinux:base
+
+# Avoid interactive prompts
+ENV TERM=xterm-256color
+
+# Update keyring first, then system, then install podman
+RUN pacman -Sy --noconfirm archlinux-keyring && \
+    pacman -Syu --noconfirm && \
+    pacman -S --noconfirm opencode && \
+    pacman -Scc --noconfirm
+
+RUN mkdir -p /root/.config/opencode
+
+COPY opencode.jsonc /root/.config/opencode/opencode.jsonc
+
+WORKDIR /workspace
+CMD ["opencode"]
